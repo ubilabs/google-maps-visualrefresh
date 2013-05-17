@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Old</title>
+    <style>
+      html, body, #map-canvas {
+        font-family: Arial;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      h1 {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-weight: normal;
+      }
+    </style>
+</head>
+  <body>
+    <div id="map-canvas"></div>
+    <h1>OLD</h1>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+
+      google.maps.visualRefresh = false;
+
+      var myLatlng = new google.maps.LatLng(40.714346,-74.005961);
+      
+      var map = new google.maps.Map(document.getElementById('map-canvas'), {
+        zoom: 4,
+        center: myLatlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+
+      var contentString = '<b>New York City</b><p>New York is the most populous city in the United States and the center of the New York Metropolitan Area, one of the most populous urban agglomerations in the world. </p><a href="http://en.wikipedia.org/wiki/New_York_City">http://en.wikipedia.org/wiki/New_York_City</a>';
+
+      var infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        maxWidth: 400
+      });
+
+      var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        title: 'Uluru (Ayers Rock)'
+      });
+
+      function sync(lat, lng, zoom){
+        map.setCenter(new google.maps.LatLng(lat, lng));
+        map.setZoom(zoom);
+      }
+
+      function openInfoWondow(){
+        infowindow.open(map, marker);
+      }
+
+      function closeInfoWondow(){
+        infowindow.close();
+      }
+
+
+    </script>
+  </body>
+</html>

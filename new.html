@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>New</title>
+    <link href="https://google-developers.appspot.com/maps/documentation/javascript/examples/default.css" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+    <style>
+      html, body, #map-canvas {
+        font-family: Arial;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      #address { 
+        position: absolute;
+        top: 10px;
+        left: 100px;
+        width: 160px;
+        line-height: 1.5em;
+        opacity: 0.5;
+        transition: all 0.5s;
+        font-family: Arial;
+      }
+
+      #address:hover{
+        opacity: 1;
+      }
+
+      #address:focus {
+        outline: none;
+      }
+
+      h1 {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-weight: normal;
+      }
+
+    </style>
+</head>
+  <body>
+    <div id="map-canvas"></div>
+    <input type="text" id="address" />
+    <h1>NEW</h1>
+    <script>
+
+      google.maps.visualRefresh = true;
+
+      var myLatlng = new google.maps.LatLng(40.714346,-74.005961);
+      
+      var map = new google.maps.Map(document.getElementById('map-canvas'), {
+        zoom: 4,
+        center: myLatlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+
+      var input = document.getElementById('address');
+      var autocomplete = new google.maps.places.Autocomplete(input);
+
+      autocomplete.bindTo('bounds', map);
+
+      google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        var place = autocomplete.getPlace();
+        if (!place.geometry) {
+          return;
+        }
+
+        if (place.geometry.viewport) {
+          map.fitBounds(place.geometry.viewport);
+        } else {
+          map.setCenter(place.geometry.location);
+          map.setZoom(17);
+        }
+      });
+
+      var contentString = '<b>New York City</b><p>New York is the most populous city in the United States and the center of the New York Metropolitan Area, one of the most populous urban agglomerations in the world. </p><a href="http://en.wikipedia.org/wiki/New_York_City">http://en.wikipedia.org/wiki/New_York_City</a>';
+
+      var infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        maxWidth: 400
+      });
+
+      var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        title: 'Uluru (Ayers Rock)'
+      });
+
+      function remote(){
+        return window.parent.document.getElementById("old").contentWindow;
+      }
+
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map, marker);
+        remote().openInfoWondow();
+      });
+
+      google.maps.event.addListener(infowindow, 'closeclick', function() {
+        remote().closeInfoWondow();
+      });
+
+      google.maps.event.addListener(map, 'bounds_changed', function() {
+
+        var center = map.getCenter(),
+          zoom = map.getZoom();
+
+          remote().sync(center.lat(), center.lng(), zoom);
+
+      });
+
+
+    </script>
+  </body>
+</html>
